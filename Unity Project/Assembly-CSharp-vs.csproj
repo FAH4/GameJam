@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{35223D1A-0ABA-3E00-D682-2F913F0EB5DC}</ProjectGuid>
+	<ProjectGuid>{BDBCE7D3-139D-3EDB-816D-FB1D73476D25}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -46,7 +46,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Player.cs" />
+     <Compile Include="Assets\EnemyManager.cs" />
+     <Compile Include="Assets\EnemyScript.cs" />
+     <Compile Include="Assets\Scripts\MoveOnZ.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/Programs/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>
