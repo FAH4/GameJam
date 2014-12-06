@@ -21,7 +21,8 @@ public class Player : MonoBehaviour {
 	//public PlayerMovementCurveTypes PlayerMovementCurve = PlayerMovementCurveTypes.Log_Time;
 
 	[Header("Movement Settings")]
-	public float PlayerSpeedModifier = 1;
+	public float PlayerSpeedModifierX = 1;
+	public float PlayerSpeedModifierY = 1;
 	[Range (0,1)]
 	public float PlayerLogarithmicSmoothingWithInput =.5f;
 	[Range (0,1)]
@@ -115,8 +116,8 @@ public class Player : MonoBehaviour {
 			PlayerSpeed.y = Mathf.Lerp (PlayerPreviousSpeed.y, 0, PlayerLogarithmicSmoothingWithoutInput);
 
 		}
-		PlayerPosition.x += PlayerSpeed.x * PlayerSpeedModifier * Time.deltaTime;
-		PlayerPosition.y += PlayerSpeed.y * PlayerSpeedModifier * Time.deltaTime;
+		PlayerPosition.x += PlayerSpeed.x * PlayerSpeedModifierX * Time.deltaTime;
+		PlayerPosition.y += PlayerSpeed.y * PlayerSpeedModifierY * Time.deltaTime;
 		RotateShip ();
 	}
 	void RotateShip(){
