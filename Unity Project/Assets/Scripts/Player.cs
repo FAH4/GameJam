@@ -51,7 +51,9 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		PlayerMovement ();
-		PlayerFire ();
+		PlayerWeapons ();
+		PlayerAbilities ();
+		PlayerFireStandard ();
 	}
 	void PlayerMovement(){
 		PlayerPosition = this.transform.localPosition;
@@ -62,32 +64,44 @@ public class Player : MonoBehaviour {
 		this.transform.eulerAngles = PlayerRotation;
 		PlayerPreviousSpeed = PlayerSpeed;
 	}
-	void PlayerFire(){
-		WeaponTimer -= Time.deltaTime;
-		if (WeaponTimer <= 0 && (Input.GetButton ("Fire1")) || Input.GetAxis("Fire1RightTrigger")> .2f) {
+	void PlayerFireStandard(){
+
+		if (WeaponTimer <= 0 && (Input.GetButton ("Fire1"))) {
 			WeaponTimer = WeaponCooldown;
 			TempBullet = (GameObject)Instantiate(Resources.Load("Bullet"),this.transform.position, this.transform.rotation);
 			//TempBullet.transform.parent = this.transform;
 			TempBullet.GetComponent<MoveOnZ>().BulletSpeed = BulletSpeed;
 			TempBullet.transform.forward=(this.transform.right);
 
+
+
+		}
+	}
+	void PlayerWeapons(){
+		WeaponTimer -= Time.deltaTime;
+		PlayerFireStandard ();
+	}
+	void PlayerAbilities (){
+		PlayerFireAbility ();
+	}
+	void PlayerFireAbility(){
+		if (WeaponCooldown < 0 && Input.GetAxis ("Fire1RightTrigger") > .2f) {
 			if(FollowMouse){
 				BulletLookAtLocation = MainCamera.ScreenToWorldPoint(Input.mousePosition);
 				BulletLookAtLocation.z =this.transform.position.z;
-
+				
 				TempBullet.transform.LookAt(BulletLookAtLocation);
-
-
+				
+				
 			}
-			if(RightAnaloStick){
+			else {
 				BulletLookAtLocation.x = this.transform.position.x + Input.GetAxis ("HorizontalRightStick");
 				BulletLookAtLocation.y = this.transform.position.y + Input.GetAxis("VerticalRightStick");
 				BulletLookAtLocation.z = 0;
 				
 				TempBullet.transform.LookAt(BulletLookAtLocation);
-				
-
 			}
+
 		}
 	}
 	
