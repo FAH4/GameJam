@@ -64,7 +64,7 @@ public class Player : MonoBehaviour {
 	}
 	void PlayerFire(){
 		WeaponTimer -= Time.deltaTime;
-		if (WeaponTimer <= 0 && Input.GetButton ("Fire1")) {
+		if (WeaponTimer <= 0 && (Input.GetButton ("Fire1")) || Input.GetAxis("Fire1RightTrigger")> .2f) {
 			WeaponTimer = WeaponCooldown;
 			TempBullet = (GameObject)Instantiate(Resources.Load("Bullet"),this.transform.position, this.transform.rotation);
 			//TempBullet.transform.parent = this.transform;

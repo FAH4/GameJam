@@ -3,6 +3,7 @@ using System.Collections;
 
 public class MoveOnZ : MonoBehaviour {
 	public float BulletSpeed;
+	//public Vector3 PlayArea;
 	private Vector3 myPosition;
 	// Use this for initialization
 	void Start () {
@@ -15,6 +16,9 @@ public class MoveOnZ : MonoBehaviour {
 		myPosition = this.transform.position;
 		myPosition.z = 0;
 		this.transform.position = myPosition;
+		if (Vector3.Distance(this.transform.position,Vector3.zero) >10) {
+			Destroy (this.gameObject);
+		}
 	}
 
 	void OnCollisionEnter(Collision Col){
