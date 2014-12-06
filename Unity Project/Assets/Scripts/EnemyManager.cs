@@ -34,7 +34,7 @@ public class EnemyManager : MonoBehaviour {
 	
 	}
 
-	public void SpawnEnemy(){
+	public void SpawnEnemySquad(){
 		
 
 

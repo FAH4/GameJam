@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class Enemy : MonoBehaviour {
 	private GameObject MyGameObject;
 	private Vector3 MyPosition;
+	public EnemySquad MySquad;
 	// Use this for initialization
 	void Start () {
 	
@@ -11,20 +12,23 @@ public abstract class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		this.transform.position = Vector3.Lerp(this.transform.position, MyPosition, .5f);
 	}
 	public void InitializeEnemy(){
 		MyGameObject = (GameObject)Instantiate (Resources.Load ("Enemy"));
 		MyGameObject.transform.parent = this.transform;
-		MyPosition.x = Random.Range (-.5f, .5f);
-		MyPosition.y = Random.Range (-.5f, .5f);
+		MyPosition.x = .7f;
+		MyPosition.y = 0;
 		MyPosition.z = 0;
 		MyGameObject.transform.localPosition = MyPosition;
 	}
 	public void Fire(){}
 	public void Ability(){}
 	public void Explode(){
+		
 		Destroy(this.transform);
 	}
-	public void MoveTo(Vector3 position){}
+	public void MoveTo(Vector3 position){
+		MyPosition = position;
+	}
 }

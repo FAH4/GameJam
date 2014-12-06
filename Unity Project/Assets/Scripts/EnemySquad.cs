@@ -26,4 +26,11 @@ public abstract class EnemySquad : MonoBehaviour {
 			}
 		}
 	}
+	void SetMovePosition(Vector3 position){
+		
+		for(int i = 0; i < SquadEnemies.Length;i++){
+			position.y += (i - Mathf.FloorToInt(SquadEnemies.Length/2))*100;
+			SquadEnemies[i].MoveTo(position);
+		}
+	}
 }
