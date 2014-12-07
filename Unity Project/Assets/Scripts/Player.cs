@@ -20,7 +20,7 @@ public class Player : MonoBehaviour {
 	}
 	
 
-	public Camera MainCamera;
+	public GameObject ShipMesh;
 	Vector2 PlayerPosition;
 	Vector3 PlayerRotation;
 	Vector2 PlayerSpeed;

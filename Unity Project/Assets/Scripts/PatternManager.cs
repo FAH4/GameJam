@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyScript : MonoBehaviour {
-	public Enemy MyEnemyObject;
+public class PatternManager : MonoBehaviour {
+
 	// Use this for initialization
 	void Start () {
 	

@@ -5,6 +5,7 @@ public class MoveOnZ : MonoBehaviour {
 	public float BulletSpeed;
 	//public Vector3 PlayArea;
 	private Vector3 myPosition;
+	
 	// Use this for initialization
 	void Start () {
 	
@@ -22,9 +23,15 @@ public class MoveOnZ : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision Col){
-		Debug.Log (Col.transform.name);
+		
 		Destroy (this.gameObject);
-		//Col.gameObject.GetComponent<Enemy>().Explode();
+		if(Col.transform.gameObject.layer == 9){
+			Col.gameObject.GetComponent<EnemyScript>().MyEnemyObject.Explode();
+		}
+		else if(Col.transform.gameObject.layer == 11){
+			Col.gameObject.GetComponentInChildren<Player>().ShipMesh.renderer.enabled = false;
+			
+		}
 	
 	}
 }

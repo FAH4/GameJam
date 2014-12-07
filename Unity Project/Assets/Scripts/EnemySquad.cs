@@ -3,35 +3,60 @@ using System.Collections;
 
 public abstract class EnemySquad : Object {
 	private Enemy[] SquadEnemies;
+	private float Spacing = .3f;
+	private Vector3 TempEnemyPostion;
+	
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	// Update is ca//lled once per frame
+	public void Update () {
+		
+		for(int i = 0; i < SquadEnemies.Length;i++){
+			if(SquadEnemies[i].Alive){
+				SquadEnemies[i].Update();
+			}
+		}
 	}
 	
-	public void InitializeSquad(){
-		SquadEnemies = new Enemy[3];
+	public void InitializeSquad(int EnemiesInSquad){
+		SquadEnemies = new Enemy[EnemiesInSquad];
 		for(int i = 0; i < SquadEnemies.Length;i++){
-			SquadEnemies[i] = new Enemy_Basic();
-			SquadEnemies[i].InitializeEnemy();
+			//if(SquadEnemies[i].Alive){
+				SquadEnemies[i] = new Enemy_Basic();
+				SquadEnemies[i].InitializeEnemy(this);//
+			//}
 		}
 	}
 	public void DestroySquad(){
 		if(SquadEnemies.Length>0){
+			
 			for(int i = 0; i < SquadEnemies.Length;i++){
-				SquadEnemies[i].Explode();
+				if(SquadEnemies[i].Alive){
+					SquadEnemies[i].Explode();
+				}
 			}
 		}
 	}
-	public void SetMovePosition(Vector3 position){
+	
+	public void SetMovePosition(Vector3 position, float TimeToMove){
 		
+		for(int i = 0; i < SquadEnemies.Length;i++){//
+			if(SquadEnemies[i].Alive){
+				TempEnemyPostion = position;
+				TempEnemyPostion.y += (i - Mathf.FloorToInt(SquadEnemies.Length/2f))*Spacing;
+				
+				SquadEnemies[i].MoveTo(TempEnemyPostion,TimeToMove);//
+			}
+		}
+	}
+	public void Volley(){
 		for(int i = 0; i < SquadEnemies.Length;i++){
-			position.y += (i - Mathf.FloorToInt(SquadEnemies.Length/2))*100;
-			SquadEnemies[i].MoveTo(position);
+			if(SquadEnemies[i].Alive){
+				SquadEnemies[i].Fire();
+			}
 		}
 	}
 }

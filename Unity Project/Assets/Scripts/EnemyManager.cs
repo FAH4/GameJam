@@ -1,7 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+public enum EnemyTypes {SingleShooter, ChargeBeamers, MissileBattery, Mothership, LootShip}
 public class EnemyManager : MonoBehaviour {
+	private ArrayList ActiveEnemySquads = new ArrayList();
+	private Vector2 OffScreenSpawnPoint = new Vector2(1.2f,.5f);
+	private Vector3 ScreenPosition;
+	public GameObject MainCamera;
 	private static EnemyManager instance;
 	private EnemyManager(){}
 	
@@ -31,14 +37,19 @@ public class EnemyManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		foreach(EnemySquad squad in ActiveEnemySquads){
+			
+			squad.Update();
+		}
+		
 	}
 
-	public void SpawnEnemySquad(){
-		EnemySquads[0] = new EnemySquad_Basic();
-		EnemySquads[0].InitializeSquad();
-		EnemySquads[0].SetMovePosition(Player.Instance.transform.position);
-
+	public void SpawnEnemySquad(int SquadNumber, EnemyTypes SquadEnemyType, int NumberOfEnemies){
+		EnemySquads[SquadNumber] = new EnemySquad_Basic();
+		EnemySquads[SquadNumber].InitializeSquad(NumberOfEnemies);
+		ActiveEnemySquads.Add (EnemySquads[SquadNumber]);
+		
+		MoveEnemySquad(SquadNumber,OffScreenSpawnPoint, .000001f);
 
 	}
 
@@ -46,7 +57,17 @@ public class EnemyManager : MonoBehaviour {
 		
 	}
 	
-	public void MoveEnemySquad(){
-		EnemySquads[0].SetMovePosition(Player.Instance.transform.position);
+	public void MoveEnemySquad(int SquadNumber, Vector2 percent, float TimeToMove){
+		ScreenPosition.x =percent.x * Screen.width;
+		ScreenPosition.y =percent.y * Screen.height;
+		ScreenPosition.z = 0;
+		ScreenPosition = MainCamera.camera.ScreenToWorldPoint(ScreenPosition);
+		ScreenPosition.z = 0;
+		EnemySquads[SquadNumber].SetMovePosition(ScreenPosition,TimeToMove);
+		
+	}
+	
+	public void OrderVolley(int SquadNumber){
+		EnemySquads[SquadNumber].Volley();
 	}
 }

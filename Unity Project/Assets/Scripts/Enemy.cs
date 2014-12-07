@@ -5,29 +5,56 @@ public abstract class Enemy : Object {
 	private GameObject MyGameObject;
 	private Vector3 MyPosition;
 	public EnemySquad MySquad;
+	public float Timer;
+	public float TimeToMove;
+	public bool Alive = true;
+	private bool Active = false;
+	private Vector3 StartOfMove;//
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		MyGameObject.transform.position = Vector3.Lerp(MyGameObject.transform.position, MyPosition, .5f);
+	public void Update () {
+		if(Active){
+			MyGameObject.transform.position = Vector3.Lerp(StartOfMove, MyPosition, Timer/TimeToMove);
+			Timer += Time.deltaTime;
+			Timer = Timer>TimeToMove? TimeToMove: Timer;
+		}
 	}
-	public void InitializeEnemy(){
+	public void InitializeEnemy(EnemySquad _MySquad){
 		MyGameObject = (GameObject)Instantiate (Resources.Load ("Enemy"));
-		MyPosition.x = .7f;
-		MyPosition.y = 0;
-		MyPosition.z = 0;
-		MyGameObject.transform.localPosition = MyPosition;
+
+		MyGameObject.transform.Translate(10f,0,0);
+		MoveTo(MyGameObject.transform.position,1);
+		MyGameObject.GetComponent<EnemyScript>().MyEnemyObject = this;
+		MySquad = _MySquad;
+		Active = true;
+		
+		
 	}
-	public void Fire(){}
+	public void Fire(){
+		GameObject tempGO = (GameObject) Instantiate(Resources.Load("EnemyBullet"));
+		tempGO.transform.position = MyGameObject.transform.position;
+		tempGO.transform.Translate( - .5f,0,0);
+		tempGO.transform.Rotate(0,-90,0);
+		tempGO.GetComponent<MoveOnZ>().BulletSpeed = .05f;
+		
+	}
 	public void Ability(){}
 	public void Explode(){
-		
-		Destroy(MyGameObject.transform);
+		Destroy(MyGameObject);
+		Alive = false;
 	}
-	public void MoveTo(Vector3 position){
+	public void MoveTo(Vector3 position, float OverTime){
+		Timer = 0;
+		TimeToMove = OverTime;
+		if(TimeToMove ==0){
+			Timer = 1;
+			TimeToMove = 1;
+		}
 		MyPosition = position;
+		StartOfMove = MyGameObject.transform.position;//
 	}
 }
