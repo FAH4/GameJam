@@ -68,37 +68,55 @@ public class LevelManager : MonoBehaviour {
 	}
 	
 	public void AddPatternToTimeStamps(float TimeStart,int PatternNumber,  int _NumberOfEnemiesToSpawn){
-		TimeStartOfOrders = TimeStart;
-		NumberOfEnemiesToSpawn = _NumberOfEnemiesToSpawn;
-		switch(PatternNumber){
-		case 0:
-			SquadOrder_Spawn(0);
-			SquadOrder_Move(0,.75f,.25f,.5f);
-			SquadOrder_Fire(.6f);
-			SquadOrder_Move(.75f,-.25f,.25f,2f);
-			SquadOrder_Fire(2f);
+		if(!ReadyToStart){
+			TimeStartOfOrders = TimeStart;
+			NumberOfEnemiesToSpawn = _NumberOfEnemiesToSpawn;
 			
+			/*
+				SquadOrder_Spawn(0);
+					Spawns a group of enemies at time offset 0
+					You then place other orders following this command
+					Once a new SquadOrder_Spawn is called all squads created previously will no longer be gettning new orders
+					
+				SquadOrder_Move(0,.75f,.25f,.5f);
+					Moves the current squad to a location over time
+					A new SquadOrder_Move will not blend movement, it will overwrite a previous one if the timing overlaps
+					Parameters left to right: Time Offset, Percent of ScreenFromLeft, Percent of Screen from Bottom, Time To Move
+				
+				SquadOrder_Fire(.6f);
+					Orders the current squad to fire at time offset
+					
+					*/
+			switch(PatternNumber){
+			case 0:
+				
+				SquadOrder_Spawn(0);
+				SquadOrder_Move(0,.75f,.25f,.5f);
+				SquadOrder_Fire(.6f);
+				SquadOrder_Move(.75f,-.25f,.25f,2f);
+				SquadOrder_Fire(2f);
+				
+				
+				break;
+			case 1:
+				SquadOrder_Spawn(0);
+				SquadOrder_Move(0,.75f,.25f,0f);//
+				SquadOrder_Move(.01f,.75f,.75f,1f);
+				SquadOrder_Fire(1.1f);
+				SquadOrder_Move(2f,-.25f,.25f,2f);
+				SquadOrder_Fire(2f);
+				
+				
+				SquadOrder_Spawn(-1);
+				SquadOrder_Move(-1,.75f,1.25f,0f);
+				SquadOrder_Move(1.01f,.75f,.25f,1f);
+				SquadOrder_Fire(2.1f);
+				SquadOrder_Move(3f,-.25f,.25f,2f);
+				SquadOrder_Fire(3f);
+				break;
 			
-			break;
-		case 1:
-			SquadOrder_Spawn(0);
-			SquadOrder_Move(0,.75f,.25f,0f);//
-			SquadOrder_Move(.01f,.75f,.75f,1f);
-			SquadOrder_Fire(1.1f);
-			SquadOrder_Move(2f,-.25f,.25f,2f);
-			SquadOrder_Fire(2f);
-			
-			
-			SquadOrder_Spawn(-1);
-			SquadOrder_Move(-1,.75f,1.25f,0f);
-			SquadOrder_Move(1.01f,.75f,.25f,1f);
-			SquadOrder_Fire(2.1f);
-			SquadOrder_Move(3f,-.25f,.25f,2f);
-			SquadOrder_Fire(3f);
-			break;
-		
+			}
 		}
-		
 	}
 	public void StartGame(){
 		ReorganizeTimeStamps();

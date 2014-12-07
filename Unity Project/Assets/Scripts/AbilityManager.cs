@@ -36,6 +36,7 @@ public class AbilityManager : MonoBehaviour {
 	public float Flash_DurationTimer;
 	public bool Flash_Earned;
 	public bool Flash_Active;
+	public float Flash_Distance;
 	
 	[Header("SpinCharge Settings")]
 	public float SpinCharge_Cooldown;
@@ -80,7 +81,27 @@ public class AbilityManager : MonoBehaviour {
 	}
 	void Update () {
 		PlayerSelectAbility();
+		UpdateAbilityEffects();
 		PlayerFireAbility ();
+	}
+	void UpdateAbilityEffects(){
+		UpdateFlashEffects();
+	}
+	void UpdateFlashEffects(){
+		if(Flash_Earned){
+			if(Flash_Active){
+				if(Flash_DurationTimer > AbilityManager.Instance.Flash_Duration){
+					Flash_Active = false;
+					Flash_CooldownTimer = 0;
+				}
+				Flash_DurationTimer += Time.deltaTime;
+				Player.Instance.WeaponCooldown = .1f;
+			}
+			else{
+				Player.Instance.WeaponCooldown = .4f;
+				Flash_CooldownTimer +=Time.deltaTime;
+			}
+		}	
 	}
 	
 	void PlayerSelectAbility(){
@@ -130,8 +151,23 @@ public class AbilityManager : MonoBehaviour {
 	 * Flash, SpinCharge, LockOn, LaserBurst, WallConstruct
 	 * ********************************/
 	static void Flash(){
-		Debug.Log ("Flash" + AbilityManager.Instance.Flash_CooldownTimer.ToString());
-		AbilityManager.Instance.Flash_CooldownTimer++;
+		if(!AbilityManager.Instance.Flash_Active && AbilityManager.Instance.Flash_CooldownTimer > AbilityManager.Instance.Flash_Cooldown){
+			AbilityManager.Instance.Flash_Active = true;
+			AbilityManager.Instance.Flash_DurationTimer = 0;
+			Debug.Log ("Flash used");
+		}
+		if(AbilityManager.Instance.Flash_Active){
+			
+		}
+		/*
+		ScreenPosition.x =percent.x * Screen.width;
+		ScreenPosition.y =percent.y * Screen.height;
+		ScreenPosition.z = 0;
+		ScreenPosition = MainCamera.camera.ScreenToWorldPoint(ScreenPosition);
+		ScreenPosition.z = 0;
+		*/
+		
+		
 	}
 	static void SpinCharge(){
 		Debug.Log ("SpinCharge");
