@@ -46,7 +46,7 @@ public class EnemyManager : MonoBehaviour {
 
 	public void SpawnEnemySquad(int SquadNumber, EnemyTypes SquadEnemyType, int NumberOfEnemies, EnemyTypes EnemyTypeToSpawn){
 		EnemySquads[SquadNumber] = new EnemySquad_Basic();
-		EnemySquads[SquadNumber].InitializeSquad(NumberOfEnemies);
+		EnemySquads[SquadNumber].InitializeSquad(NumberOfEnemies,EnemyTypeToSpawn);
 		ActiveEnemySquads.Add (EnemySquads[SquadNumber]);
 		
 		MoveEnemySquad(SquadNumber,OffScreenSpawnPoint, .000001f);

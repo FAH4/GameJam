@@ -23,8 +23,27 @@ public abstract class Enemy : Object {
 			Timer = Timer>TimeToMove? TimeToMove: Timer;
 		}
 	}
-	public void InitializeEnemy(EnemySquad _MySquad){
-		MyGameObject = (GameObject)Instantiate (Resources.Load ("Enemy"));
+	public void InitializeEnemy(EnemySquad _MySquad, EnemyTypes EnemyTypeToSpawn){
+	
+		switch(EnemyTypeToSpawn){
+			case EnemyTypes.ChargeBeamers:
+			MyGameObject = (GameObject)Instantiate (Resources.Load ("ChargeBeamers"));
+			break;
+			case EnemyTypes.LootShip:
+			MyGameObject = (GameObject)Instantiate (Resources.Load ("LootShip"));
+			break;
+			case EnemyTypes.MissileBattery:
+			MyGameObject = (GameObject)Instantiate (Resources.Load ("MissileBattery"));
+			break;
+			case EnemyTypes.Mothership:
+			MyGameObject = (GameObject)Instantiate (Resources.Load ("Mothership"));
+			break;
+			case EnemyTypes.SingleShooter:
+			MyGameObject = (GameObject)Instantiate (Resources.Load ("SingleShooter"));
+			break;
+			
+		}
+		
 
 		MyGameObject.transform.Translate(10f,0,0);
 		MoveTo(MyGameObject.transform.position,1);

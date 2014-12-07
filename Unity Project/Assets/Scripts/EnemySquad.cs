@@ -21,12 +21,12 @@ public abstract class EnemySquad : Object {
 		}
 	}
 	
-	public void InitializeSquad(int EnemiesInSquad){
+	public void InitializeSquad(int EnemiesInSquad, EnemyTypes EnemyTypeToSpawn){
 		SquadEnemies = new Enemy[EnemiesInSquad];
 		for(int i = 0; i < SquadEnemies.Length;i++){
 			//if(SquadEnemies[i].Alive){
 				SquadEnemies[i] = new Enemy_Basic();
-				SquadEnemies[i].InitializeEnemy(this);//
+				SquadEnemies[i].InitializeEnemy(this,EnemyTypeToSpawn);//
 			//}
 		}
 	}

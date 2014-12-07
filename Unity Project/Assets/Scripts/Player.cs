@@ -139,7 +139,13 @@ public class Player : MonoBehaviour {
 		PlayerPosition.y = PlayerPosition.y > .5f ? .5f : PlayerPosition.y;
 	}
 	
-	public void GetPlayerPosition(){
+	public Vector3 GetPlayerPosition(){
+		return PlayerPosition;
+	}
+	public void SetPlayerPosition(Vector3 FlashOffset){
+	
+		this.transform.position += FlashOffset;
+		PlayerPosition = this.transform.position;
 	}
 
 

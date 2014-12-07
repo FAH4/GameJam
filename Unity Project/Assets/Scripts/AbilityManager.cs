@@ -36,7 +36,8 @@ public class AbilityManager : MonoBehaviour {
 	public float Flash_DurationTimer;
 	public bool Flash_Earned;
 	public bool Flash_Active;
-	public float Flash_Distance;
+	public float Flash_DistancePercent;
+	public GameObject Flash_PlayArea;
 	
 	[Header("SpinCharge Settings")]
 	public float SpinCharge_Cooldown;
@@ -90,16 +91,21 @@ public class AbilityManager : MonoBehaviour {
 	void UpdateFlashEffects(){
 		if(Flash_Earned){
 			if(Flash_Active){
-				if(Flash_DurationTimer > AbilityManager.Instance.Flash_Duration){
+				if(Flash_DurationTimer >= AbilityManager.Instance.Flash_Duration){
 					Flash_Active = false;
 					Flash_CooldownTimer = 0;
-					
+					Vector3 PlayerPosition = Player.Instance.GetPlayerPosition();
+					Vector3 FlashPositionOffset = Vector3.zero;
+					FlashPositionOffset.x = Input.GetAxis ("HorizontalRightStick") * Flash_DistancePercent * Flash_PlayArea.transform.localScale.x;
+					FlashPositionOffset.y = Input.GetAxis ("VerticalRightStick") * Flash_DistancePercent *  Flash_PlayArea.transform.localScale.x;
+					Debug.Log(FlashPositionOffset.ToString());
+					Player.Instance.SetPlayerPosition(FlashPositionOffset);
 				}
 				Flash_DurationTimer += Time.deltaTime;
-				Player.Instance.WeaponCooldown = .1f;
+				//Player.Instance.WeaponCooldown = .1f;
 			}
 			else{
-				Player.Instance.WeaponCooldown = .4f;
+				//Player.Instance.WeaponCooldown = .4f;
 				Flash_CooldownTimer +=Time.deltaTime;
 			}
 		}	
@@ -152,7 +158,7 @@ public class AbilityManager : MonoBehaviour {
 	 * Flash, SpinCharge, LockOn, LaserBurst, WallConstruct
 	 * ********************************/
 	static void Flash(){
-		if(!AbilityManager.Instance.Flash_Active && AbilityManager.Instance.Flash_CooldownTimer > AbilityManager.Instance.Flash_Cooldown){
+		if(!AbilityManager.Instance.Flash_Active && AbilityManager.Instance.Flash_CooldownTimer >= AbilityManager.Instance.Flash_Cooldown){
 			AbilityManager.Instance.Flash_Active = true;
 			AbilityManager.Instance.Flash_DurationTimer = 0;
 			Debug.Log ("Flash used");
