@@ -96,8 +96,16 @@ public class AbilityManager : MonoBehaviour {
 					Flash_CooldownTimer = 0;
 					Vector3 PlayerPosition = Player.Instance.GetPlayerPosition();
 					Vector3 FlashPositionOffset = Vector3.zero;
-					FlashPositionOffset.x = Input.GetAxis ("HorizontalRightStick") * Flash_DistancePercent * Flash_PlayArea.transform.localScale.x;
-					FlashPositionOffset.y = Input.GetAxis ("VerticalRightStick") * Flash_DistancePercent *  Flash_PlayArea.transform.localScale.x;
+					if(Mathf.Abs(Input.GetAxis ("HorizontalRightStick")) < 0.1f && Mathf.Abs(Input.GetAxis ("VerticalRightStick")) < 0.1f) 
+							{
+								FlashPositionOffset.x = 1.0f * Flash_DistancePercent * Flash_PlayArea.transform.localScale.x;
+								FlashPositionOffset.y = 0.0f;
+							}
+							else
+							{
+							FlashPositionOffset.x = Input.GetAxis ("HorizontalRightStick") * Flash_DistancePercent * Flash_PlayArea.transform.localScale.x;
+							FlashPositionOffset.y = Input.GetAxis ("VerticalRightStick") * Flash_DistancePercent *  Flash_PlayArea.transform.localScale.x;
+							}
 					Debug.Log(FlashPositionOffset.ToString());
 					Player.Instance.SetPlayerPosition(FlashPositionOffset);
 				}
