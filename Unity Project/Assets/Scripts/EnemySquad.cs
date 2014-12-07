@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class EnemySquad : MonoBehaviour {
+public abstract class EnemySquad : Object {
 	private Enemy[] SquadEnemies;
 	// Use this for initialization
 	void Start () {
@@ -13,20 +13,21 @@ public abstract class EnemySquad : MonoBehaviour {
 	
 	}
 	
-	void InitializeSquad(){
+	public void InitializeSquad(){
 		SquadEnemies = new Enemy[3];
 		for(int i = 0; i < SquadEnemies.Length;i++){
+			SquadEnemies[i] = new Enemy_Basic();
 			SquadEnemies[i].InitializeEnemy();
 		}
 	}
-	void DestroySquad(){
+	public void DestroySquad(){
 		if(SquadEnemies.Length>0){
 			for(int i = 0; i < SquadEnemies.Length;i++){
 				SquadEnemies[i].Explode();
 			}
 		}
 	}
-	void SetMovePosition(Vector3 position){
+	public void SetMovePosition(Vector3 position){
 		
 		for(int i = 0; i < SquadEnemies.Length;i++){
 			position.y += (i - Mathf.FloorToInt(SquadEnemies.Length/2))*100;

@@ -10,7 +10,7 @@ public class EnemyManager : MonoBehaviour {
 			get {
 					if (instance == null) {
 							
-							instance = GameObject.Find("EnemyManager").AddComponent<EnemyManager> ();
+							instance = GameObject.Find("EnemyManager").GetComponent<EnemyManager> ();
 								
 
 					}
@@ -19,7 +19,7 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 
-	private GameObject MyEnemy;
+	private EnemySquad[] EnemySquads = new EnemySquad[100];
 	private Vector3 EnemyLocation;
 	private int EnemyCount;
 	
@@ -35,12 +35,18 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	public void SpawnEnemySquad(){
-		
+		EnemySquads[0] = new EnemySquad_Basic();
+		EnemySquads[0].InitializeSquad();
+		EnemySquads[0].SetMovePosition(Player.Instance.transform.position);
 
 
 	}
 
 	public void DestroyEnemy(){
 		
+	}
+	
+	public void MoveEnemySquad(){
+		EnemySquads[0].SetMovePosition(Player.Instance.transform.position);
 	}
 }

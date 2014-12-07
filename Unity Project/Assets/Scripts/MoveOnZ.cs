@@ -24,7 +24,7 @@ public class MoveOnZ : MonoBehaviour {
 	void OnCollisionEnter(Collision Col){
 		Debug.Log (Col.transform.name);
 		Destroy (this.gameObject);
-		
+		//Col.gameObject.GetComponent<Enemy>().Explode();
 	
 	}
 }

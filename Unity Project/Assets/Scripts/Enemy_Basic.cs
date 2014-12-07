@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemySquad_Basic : EnemySquad {
+public class Enemy_Basic : Enemy {
 
 	// Use this for initialization
 	void Start () {
@@ -12,5 +12,4 @@ public class EnemySquad_Basic : EnemySquad {
 	void Update () {
 	
 	}
-	
 }
