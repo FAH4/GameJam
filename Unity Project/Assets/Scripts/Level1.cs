@@ -14,7 +14,8 @@ public class Level1 : MonoBehaviour {
 				Must be the last call!!
 				Reorganizes the timeline and starts the level
 				*/
-		LevelManager.Instance.AddPatternToTimeStamps(1,1,2);
+		LevelManager.Instance.AddPatternToTimeStamps(1,1,EnemyTypes.ChargeBeamers,EnemyTypes.LootShip);
+		LevelManager.Instance.AddPatternToTimeStamps(1,1,EnemyTypes.SingleShooter);
 		
 		LevelManager.Instance.StartGame();
 		//LevelManager.Instance.AddPatternToTimeStamps(3,12,5);//

@@ -30,6 +30,9 @@ public class LevelManager : MonoBehaviour {
 	private int GroupPlacementIndex = -1;
 	private float TimeStartOfOrders;
 	private int NumberOfEnemiesToSpawn;
+	private EnemyTypes CurrentPrimaryEnemyType;
+	private EnemyTypes CurrentSecondaryEnemyType;
+	
 
 	// Use this for initialization
 	void Start () {
@@ -53,7 +56,7 @@ public class LevelManager : MonoBehaviour {
 			TimeStamps[TimeStampIndex].Active = false;
 			
 			if(TimeStamps[ TimeStampIndex].ThisActionType ==ActionType.Spawn){
-				EnemyManager.Instance.SpawnEnemySquad(TimeStamps[ TimeStampIndex].SquadNumber,EnemyTypes.SingleShooter, TimeStamps[TimeStampIndex].NumberOfEnemiesToSpawn);
+				EnemyManager.Instance.SpawnEnemySquad(TimeStamps[ TimeStampIndex].SquadNumber,EnemyTypes.SingleShooter, TimeStamps[TimeStampIndex].NumberOfEnemiesToSpawn, TimeStamps[TimeStampIndex].MyEnemyType);
 			}
 			else if(TimeStamps[ TimeStampIndex].ThisActionType ==ActionType.Move){
 				EnemyManager.Instance.MoveEnemySquad(TimeStamps[ TimeStampIndex].SquadNumber,TimeStamps[TimeStampIndex].PercentPositionOnScreen,TimeStamps[TimeStampIndex].TimeToMove);
@@ -66,12 +69,18 @@ public class LevelManager : MonoBehaviour {
 		}
 		
 	}
-	
-	public void AddPatternToTimeStamps(float TimeStart,int PatternNumber,  int _NumberOfEnemiesToSpawn){
+	public void AddPatternToTimeStamps(float TimeStart, int PatternNumber, EnemyTypes _CurrenEnemyTypes){
+		AddPatternToTimeStamps( TimeStart, PatternNumber,  1,  _CurrenEnemyTypes, _CurrenEnemyTypes);
+	}
+	public void AddPatternToTimeStamps(float TimeStart, int PatternNumber, EnemyTypes _CurrentPrimaryEnemyTypes, EnemyTypes _CurrentSecondaryEnemyTypes){
+		AddPatternToTimeStamps( TimeStart, PatternNumber,  1,  _CurrentPrimaryEnemyTypes, _CurrentSecondaryEnemyTypes);
+	}
+	private void AddPatternToTimeStamps(float TimeStart,int PatternNumber,  int _NumberOfEnemiesToSpawn, EnemyTypes _CurrentPrimaryEnemyType, EnemyTypes _CurrentSecondaryEnemyType){
 		if(!ReadyToStart){
 			TimeStartOfOrders = TimeStart;
 			NumberOfEnemiesToSpawn = _NumberOfEnemiesToSpawn;
-			
+			CurrentPrimaryEnemyType = _CurrentPrimaryEnemyType;	
+			CurrentSecondaryEnemyType = _CurrentSecondaryEnemyType;
 			/*
 				SquadOrder_Spawn(0);
 					Spawns a group of enemies at time offset 0
@@ -90,7 +99,7 @@ public class LevelManager : MonoBehaviour {
 			switch(PatternNumber){
 			case 0:
 				
-				SquadOrder_Spawn(0);
+				SquadOrder_SpawnPrimary(0);
 				SquadOrder_Move(0,.75f,.25f,.5f);
 				SquadOrder_Fire(.6f);
 				SquadOrder_Move(.75f,-.25f,.25f,2f);
@@ -99,7 +108,7 @@ public class LevelManager : MonoBehaviour {
 				
 				break;
 			case 1:
-				SquadOrder_Spawn(0);
+				SquadOrder_SpawnPrimary(0);
 				SquadOrder_Move(0,.75f,.25f,0f);//
 				SquadOrder_Move(.01f,.75f,.75f,1f);
 				SquadOrder_Fire(1.1f);
@@ -107,7 +116,7 @@ public class LevelManager : MonoBehaviour {
 				SquadOrder_Fire(2f);
 				
 				
-				SquadOrder_Spawn(-1);
+				SquadOrder_SpawnSecondary(-1);
 				SquadOrder_Move(-1,.75f,1.25f,0f);
 				SquadOrder_Move(1.01f,.75f,.25f,1f);
 				SquadOrder_Fire(2.1f);
@@ -137,9 +146,14 @@ public class LevelManager : MonoBehaviour {
 			}
 		}
 	}
-	private void SquadOrder_Spawn(float TimeOffset){
+	private void SquadOrder_SpawnPrimary(float TimeOffset){
 		GroupPlacementIndex++;
-		TimeStamps[TimeStampPlacementIndex] = new TimeStamp(TimeStartOfOrders + TimeOffset,ActionType.Spawn,GroupPlacementIndex,NumberOfEnemiesToSpawn);
+		TimeStamps[TimeStampPlacementIndex] = new TimeStamp(TimeStartOfOrders + TimeOffset,ActionType.Spawn,GroupPlacementIndex,NumberOfEnemiesToSpawn, CurrentPrimaryEnemyType);
+		TimeStampPlacementIndex ++;
+	}
+	private void SquadOrder_SpawnSecondary(float TimeOffset){
+		GroupPlacementIndex++;
+		TimeStamps[TimeStampPlacementIndex] = new TimeStamp(TimeStartOfOrders + TimeOffset,ActionType.Spawn,GroupPlacementIndex,NumberOfEnemiesToSpawn, CurrentSecondaryEnemyType);
 		TimeStampPlacementIndex ++;
 	}
 	private void SquadOrder_Move(float TimeOffset,float XPercentOfScreen, float YPercentOfScreen, float TimeToMove){
@@ -159,6 +173,7 @@ public class LevelManager : MonoBehaviour {
 		public float TimeToMove;
 		public int NumberOfEnemiesToSpawn;
 		public bool Active = true;
+		public EnemyTypes MyEnemyType;
 		
 		public TimeStamp(float _SetOffTime,ActionType _ThisActionType, int _SquadNumber,float _ScreenWidth, float _ScreenHeight, float _TimeToMove){
 			SetOffTime = _SetOffTime;
@@ -168,17 +183,19 @@ public class LevelManager : MonoBehaviour {
 			PercentPositionOnScreen.y = _ScreenHeight;
 			TimeToMove = _TimeToMove;
 			
+			
 		}
 		public TimeStamp(float _SetOffTime, ActionType _ThisActionType, int _SquadNumber){
 			SetOffTime = _SetOffTime;
 			ThisActionType = _ThisActionType;
 			SquadNumber = _SquadNumber;
 		}
-		public TimeStamp(float _SetOffTime, ActionType _ThisActionType, int _SquadNumber, int _NumberOfEnemiesToSpawn){
+		public TimeStamp(float _SetOffTime, ActionType _ThisActionType, int _SquadNumber, int _NumberOfEnemiesToSpawn, EnemyTypes _MyEnemyType){
 			SetOffTime = _SetOffTime;
 			ThisActionType = _ThisActionType;
 			SquadNumber = _SquadNumber;
 			NumberOfEnemiesToSpawn = _NumberOfEnemiesToSpawn;
+			MyEnemyType = _MyEnemyType;
 		}
 		public TimeStamp(){
 			SetOffTime = 0;

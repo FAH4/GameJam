@@ -93,6 +93,7 @@ public class AbilityManager : MonoBehaviour {
 				if(Flash_DurationTimer > AbilityManager.Instance.Flash_Duration){
 					Flash_Active = false;
 					Flash_CooldownTimer = 0;
+					
 				}
 				Flash_DurationTimer += Time.deltaTime;
 				Player.Instance.WeaponCooldown = .1f;
@@ -156,9 +157,7 @@ public class AbilityManager : MonoBehaviour {
 			AbilityManager.Instance.Flash_DurationTimer = 0;
 			Debug.Log ("Flash used");
 		}
-		if(AbilityManager.Instance.Flash_Active){
-			
-		}
+		
 		/*
 		ScreenPosition.x =percent.x * Screen.width;
 		ScreenPosition.y =percent.y * Screen.height;

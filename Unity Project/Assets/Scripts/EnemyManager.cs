@@ -44,13 +44,13 @@ public class EnemyManager : MonoBehaviour {
 		
 	}
 
-	public void SpawnEnemySquad(int SquadNumber, EnemyTypes SquadEnemyType, int NumberOfEnemies){
+	public void SpawnEnemySquad(int SquadNumber, EnemyTypes SquadEnemyType, int NumberOfEnemies, EnemyTypes EnemyTypeToSpawn){
 		EnemySquads[SquadNumber] = new EnemySquad_Basic();
 		EnemySquads[SquadNumber].InitializeSquad(NumberOfEnemies);
 		ActiveEnemySquads.Add (EnemySquads[SquadNumber]);
 		
 		MoveEnemySquad(SquadNumber,OffScreenSpawnPoint, .000001f);
-
+		Debug.Log(EnemyTypeToSpawn.ToString());
 	}
 
 	public void DestroyEnemy(){

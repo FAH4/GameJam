@@ -138,6 +138,9 @@ public class Player : MonoBehaviour {
 		PlayerPosition.y = PlayerPosition.y < -.5f ? -.5f : PlayerPosition.y;
 		PlayerPosition.y = PlayerPosition.y > .5f ? .5f : PlayerPosition.y;
 	}
+	
+	public void GetPlayerPosition(){
+	}
 
 
 	
