@@ -25,6 +25,7 @@ public class Player : MonoBehaviour {
 	Vector3 PlayerRotation;
 	Vector2 PlayerSpeed;
 	Vector2 PlayerPreviousSpeed;
+	public bool RotationAllowed = true;
 
 	[Header("Hitbox Settings")]
 	public Collider PlayerHitBox;
@@ -95,7 +96,7 @@ public class Player : MonoBehaviour {
 			TempBullet = (GameObject)Instantiate(Resources.Load("Bullet"),this.transform.position, this.transform.rotation);
 			//TempBullet.transform.parent = this.transform;
 			TempBullet.GetComponent<MoveOnZ>().BulletSpeed = BulletSpeed;
-			TempBullet.transform.forward=(this.transform.right);
+			TempBullet.transform.forward=Vector3.right;
 
 
 
@@ -125,14 +126,22 @@ public class Player : MonoBehaviour {
 		RotateShip ();
 	}
 	void RotateShip(){
-		if (RotateShipInZWithYMovement)	PlayerRotation.z = PlayerSpeed.y * PlayerYRotationAmount + OriginalRotation.z;
-		if (RotateShipInYWithYMovement)	PlayerRotation.y = PlayerSpeed.y * PlayerYRotationAmount + OriginalRotation.y;
-		if (RotateShipInXWithYMovement)	PlayerRotation.x = PlayerSpeed.y * PlayerYRotationAmount + OriginalRotation.x;
-		if (RotateShipInZWithXMovement)	PlayerRotation.z = PlayerSpeed.x * PlayerXRotationAmount + OriginalRotation.z;
-		if (RotateShipInYWithXMovement)	PlayerRotation.y = PlayerSpeed.x * PlayerXRotationAmount + OriginalRotation.y;
-		if (RotateShipInXWithXMovement)	PlayerRotation.x = PlayerSpeed.x * PlayerXRotationAmount + OriginalRotation.x;
+		if(RotationAllowed){
+			if (RotateShipInZWithYMovement)	PlayerRotation.z = PlayerSpeed.y * PlayerYRotationAmount + OriginalRotation.z;
+			if (RotateShipInYWithYMovement)	PlayerRotation.y = PlayerSpeed.y * PlayerYRotationAmount + OriginalRotation.y;
+			if (RotateShipInXWithYMovement)	PlayerRotation.x = PlayerSpeed.y * PlayerYRotationAmount + OriginalRotation.x;
+			if (RotateShipInZWithXMovement)	PlayerRotation.z = PlayerSpeed.x * PlayerXRotationAmount + OriginalRotation.z;
+			if (RotateShipInYWithXMovement)	PlayerRotation.y = PlayerSpeed.x * PlayerXRotationAmount + OriginalRotation.y;
+			if (RotateShipInXWithXMovement)	PlayerRotation.x = PlayerSpeed.x * PlayerXRotationAmount + OriginalRotation.x;
+		}
 	}
 	void CheckInPlayArea(){
+		if(PlayerPosition.x>.5f){
+			AbilityManager.Instance.SpinCharge_Active = false;
+			SetPlayerRotation(Vector3.zero);
+			AbilityManager.Instance.SpinCharge_CooldownTimer = 0;
+			RotationAllowed = true;
+		}
 		PlayerPosition.x = PlayerPosition.x < -.5f ? -.5f : PlayerPosition.x;
 		PlayerPosition.x = PlayerPosition.x > .5f ? .5f : PlayerPosition.x;
 		PlayerPosition.y = PlayerPosition.y < -.5f ? -.5f : PlayerPosition.y;
@@ -142,10 +151,18 @@ public class Player : MonoBehaviour {
 	public Vector3 GetPlayerPosition(){
 		return PlayerPosition;
 	}
-	public void SetPlayerPosition(Vector3 FlashOffset){
+	public void SetPlayerOffset(Vector3 FlashOffset){
 	
 		this.transform.position += FlashOffset;
 		PlayerPosition = this.transform.position;
+	}
+	public Vector3 GetPlayerRotation(){
+		return PlayerRotation;
+	}
+	public void SetPlayerRotation(Vector3 Rotation){
+		
+		PlayerRotation = Rotation;
+		
 	}
 
 
