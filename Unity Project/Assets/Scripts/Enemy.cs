@@ -25,26 +25,7 @@ public abstract class Enemy : Object {
 	}
 	public void InitializeEnemy(EnemySquad _MySquad, EnemyTypes EnemyTypeToSpawn){
 	
-		switch(EnemyTypeToSpawn){
-			case EnemyTypes.ChargeBeamers:
-			MyGameObject = (GameObject)Instantiate (Resources.Load ("ChargeBeamers"));
-			break;
-			case EnemyTypes.LootShip:
-			MyGameObject = (GameObject)Instantiate (Resources.Load ("LootShip"));
-			break;
-			case EnemyTypes.MissileBattery:
-			MyGameObject = (GameObject)Instantiate (Resources.Load ("MissileBattery"));
-			break;
-			case EnemyTypes.Mothership:
-			MyGameObject = (GameObject)Instantiate (Resources.Load ("Mothership"));
-			break;
-			case EnemyTypes.SingleShooter:
-			MyGameObject = (GameObject)Instantiate (Resources.Load ("SingleShooter"));
-			break;
-			
-		}
-		
-
+		MyGameObject = (GameObject)Instantiate (Resources.Load (EnemyTypeToSpawn.ToString()));
 		MyGameObject.transform.Translate(10f,0,0);
 		MoveTo(MyGameObject.transform.position,1);
 		MyGameObject.GetComponent<EnemyScript>().MyEnemyObject = this;

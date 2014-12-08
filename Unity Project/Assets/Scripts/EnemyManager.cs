@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public enum EnemyTypes {SingleShooter, ChargeBeamers, MissileBattery, Mothership, LootShip}
+public enum EnemyTypes {Basher, SingleShooter, ChargeBeamers, MissileBattery, Mothership, LootShip}
 public class EnemyManager : MonoBehaviour {
 	private ArrayList ActiveEnemySquads = new ArrayList();
 	private Vector2 OffScreenSpawnPoint = new Vector2(1.2f,.5f);

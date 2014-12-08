@@ -28,6 +28,7 @@ public class AbilityManager : MonoBehaviour {
 	public AbilityTypes SelectedAbility = AbilityTypes.Flash;
 	//private static  AbilityDelegate SelectedAbilityDelegate; 
 	private int SelectedAbilityInt;
+	public GameObject PlayArea;
 	
 	[Header("Flash Settings")]
 	public float Flash_Cooldown;
@@ -37,15 +38,20 @@ public class AbilityManager : MonoBehaviour {
 	public bool Flash_Earned;
 	public bool Flash_Active;
 	public float Flash_DistancePercent;
-	public GameObject Flash_PlayArea;
+	
 	
 	[Header("SpinCharge Settings")]
 	public float SpinCharge_Cooldown;
 	public float SpinCharge_CooldownTimer;
+	public float SpinCharge_Duration;
+	public float SpinCharge_DurationTimer;
 	public bool SpinCharge_Earned;
 	public bool SpinCharge_Active;
 	public Collider SpinCharge_AttackArea;
-	public float SpinCharge_SteeringAngleMax;
+	public float SpinCharge_DistancePercent;
+	public float SpinCharge_SpinsPerCall;
+	private float SpinCharge_SpinAngle;
+	//public float SpinCharge_SteeringAngleMax;
 	
 	[Header("LockOn Settings")]
 	public float LockOn_Cooldown;
@@ -87,27 +93,29 @@ public class AbilityManager : MonoBehaviour {
 	}
 	void UpdateAbilityEffects(){
 		UpdateFlashEffects();
+		UpdateSpinChargeEffects();
 	}
 	void UpdateFlashEffects(){
 		if(Flash_Earned){
 			if(Flash_Active){
-				if(Flash_DurationTimer >= AbilityManager.Instance.Flash_Duration){
+				if(Flash_DurationTimer >= Flash_Duration){
+					Flash_DurationTimer = Flash_Duration;
 					Flash_Active = false;
 					Flash_CooldownTimer = 0;
-					Vector3 PlayerPosition = Player.Instance.GetPlayerPosition();
+					
 					Vector3 FlashPositionOffset = Vector3.zero;
 					if(Mathf.Abs(Input.GetAxis ("HorizontalRightStick")) < 0.1f && Mathf.Abs(Input.GetAxis ("VerticalRightStick")) < 0.1f) 
-							{
-								FlashPositionOffset.x = 1.0f * Flash_DistancePercent * Flash_PlayArea.transform.localScale.x;
-								FlashPositionOffset.y = 0.0f;
-							}
-							else
-							{
-							FlashPositionOffset.x = Input.GetAxis ("HorizontalRightStick") * Flash_DistancePercent * Flash_PlayArea.transform.localScale.x;
-							FlashPositionOffset.y = Input.GetAxis ("VerticalRightStick") * Flash_DistancePercent *  Flash_PlayArea.transform.localScale.x;
-							}
-					Debug.Log(FlashPositionOffset.ToString());
-					Player.Instance.SetPlayerPosition(FlashPositionOffset);
+					{
+						FlashPositionOffset.x = 1.0f * Flash_DistancePercent * PlayArea.transform.localScale.x;
+						FlashPositionOffset.y = 0.0f;
+					}
+					else
+					{
+						FlashPositionOffset.x = Input.GetAxis ("HorizontalRightStick") * Flash_DistancePercent * PlayArea.transform.localScale.x;
+						FlashPositionOffset.y = Input.GetAxis ("VerticalRightStick") * Flash_DistancePercent *  PlayArea.transform.localScale.x;
+					}
+					
+					Player.Instance.SetPlayerOffset(FlashPositionOffset);
 				}
 				Flash_DurationTimer += Time.deltaTime;
 				//Player.Instance.WeaponCooldown = .1f;
@@ -115,6 +123,42 @@ public class AbilityManager : MonoBehaviour {
 			else{
 				//Player.Instance.WeaponCooldown = .4f;
 				Flash_CooldownTimer +=Time.deltaTime;
+				Flash_CooldownTimer = Flash_CooldownTimer>Flash_Cooldown?Flash_Cooldown: Flash_CooldownTimer;
+			}
+		}	
+	}
+	
+	void UpdateSpinChargeEffects(){
+		if(SpinCharge_Earned){
+			if(SpinCharge_Active){
+				if(SpinCharge_DurationTimer >= SpinCharge_Duration){
+					SpinCharge_DurationTimer = SpinCharge_Duration;
+					SpinCharge_Active = false;
+					SpinCharge_CooldownTimer = 0;
+					
+					
+				}
+				Vector3 SpinChargePositionOffset = Vector3.zero;
+				
+				SpinChargePositionOffset.x = Time.deltaTime/SpinCharge_Duration * SpinCharge_DistancePercent * PlayArea.transform.localScale.x ;
+				SpinChargePositionOffset.y = 0.0f;
+				
+				
+				
+				
+				Player.Instance.SetPlayerOffset(SpinChargePositionOffset);
+				SpinCharge_DurationTimer += Time.deltaTime;
+				SpinCharge_SpinAngle += SpinCharge_SpinsPerCall* Time.deltaTime/SpinCharge_Duration;
+				Vector3 SpinRotation = new Vector3(SpinCharge_SpinAngle,0,0);
+				Player.Instance.SetPlayerRotation(SpinRotation);
+				Player.Instance.RotationAllowed = false;
+				//Player.Instance.WeaponCooldown = .1f;
+			}
+			else{
+				Player.Instance.RotationAllowed = true;
+				//Player.Instance.WeaponCooldown = .4f;
+				SpinCharge_CooldownTimer +=Time.deltaTime;
+				SpinCharge_CooldownTimer = Flash_CooldownTimer>Flash_Cooldown?Flash_Cooldown: Flash_CooldownTimer;
 			}
 		}	
 	}
@@ -134,7 +178,7 @@ public class AbilityManager : MonoBehaviour {
 	}
 	void PlayerFireAbility(){
 		
-		if ( Input.GetAxis ("RightTrigger") > .2f) {
+		if ( Input.GetAxis ("RightTrigger") > .2f || Input.GetKeyDown(KeyCode.Space)) {
 			
 			AbilityDelegates[SelectedAbilityInt]();
 			/*WeaponTimer = WeaponCooldown;
@@ -183,7 +227,11 @@ public class AbilityManager : MonoBehaviour {
 		
 	}
 	static void SpinCharge(){
-		Debug.Log ("SpinCharge");
+		if(!AbilityManager.Instance.SpinCharge_Active && AbilityManager.Instance.SpinCharge_CooldownTimer >= AbilityManager.Instance.SpinCharge_Cooldown){
+			AbilityManager.Instance.SpinCharge_Active = true;
+			AbilityManager.Instance.SpinCharge_DurationTimer =0;
+			Debug.Log ("SpinCharge used");
+		}
 	}
 	static void LockOn(){
 		Debug.Log ("LockOn");
