@@ -124,6 +124,17 @@ public class LevelManager : MonoBehaviour {
 				SquadOrder_Fire(3f);
 				break;
 			
+			case 2:
+				SquadOrder_SpawnPrimary(-1);
+				SquadOrder_Move(0.5f, 1f,.15f,0.0f);
+				SquadOrder_Move(0.55f,.75f,.15f,1.0f);
+				SquadOrder_Fire(1.75f);
+				SquadOrder_Fire(1.85f);
+				SquadOrder_Fire(1.95f);
+				SquadOrder_Move(2.5f,-0.25f,.15f,3.0f);
+				
+				break;
+				
 			}
 		}
 	}
